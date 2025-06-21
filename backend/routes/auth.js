@@ -8,7 +8,8 @@ const db = require('../db'); // your mysql2/promise db
 // POST /api/auth/signup
 router.post('/signup', async (req, res) => {
   const { name, email, password, phone, department, role, club_name } = req.body;
-
+  console.log("📥 Signup endpoint hit");
+  console.log("Request body:", req.body);
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -23,6 +24,7 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Server error during signup' });
   }
 });
+console.log("Signup request received:", req.body);
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
