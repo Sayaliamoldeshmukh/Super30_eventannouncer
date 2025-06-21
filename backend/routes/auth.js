@@ -13,16 +13,18 @@ router.post('/signup', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await db.query(
+     const result = await db.query(
       'INSERT INTO users (name, email, password, phone, department, role, club_name) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, phone, department, role, club_name || null]  // ✅ Ensure club_name is included
+      [name, email, hashedPassword, phone, department, role, club_name || null]
     );
 
+
     res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ message: 'Server error during signup' });
-  }
+  }catch (error) {
+  console.error('❌ Signup failed error:', error.message);
+  res.status(500).json({ message: error.message || 'Server error during signup' });
+}
+
 });
 console.log("Signup request received:", req.body);
 
