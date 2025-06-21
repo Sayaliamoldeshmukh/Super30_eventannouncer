@@ -14,12 +14,13 @@ export default function Login({ setUser }) {
     e.preventDefault();
     setError('');
 
-    try {
-      const res = await axios.post(
-        'http://localhost:5000/api/auth/login',
-        { email, password },
-        { withCredentials: true }
-      );
+   try {
+  const res = await axios.post(
+    '/api/auth/login',
+    { email, password },
+    { withCredentials: true }
+  );
+
 
       console.log('✅ Login response:', res.data);
       setUser(res.data.user);            // ← lift user into App state
