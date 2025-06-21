@@ -8,9 +8,9 @@ const gatheringPhotos = [
   "/images/event4.jpg",
   "/images/event5.jpg",
   "/images/event6.jpg",
-  "/images/event7.jpg",
-  "/images/event8.jpg",
-  "/images/event9.jpg",
+  "/images/event7.JPG",
+  "/images/event8.JPG",
+  "/images/event9.JPG",
 ];
 
 const HomePage = () => {
