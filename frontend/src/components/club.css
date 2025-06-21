@@ -1,0 +1,26 @@
+@keyframes float1 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+.animate-float1 {
+  animation: float1 3s ease-in-out infinite;
+}
+
+.animate-float2 {
+  animation: float2 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(0.5); opacity: 0.8; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+.sparkle {
+  animation: sparkle 2s infinite ease-in-out;
+}

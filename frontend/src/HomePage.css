@@ -1,0 +1,8 @@
+@keyframes sparkle {
+  0%, 100% { transform: scale(0.5); opacity: 0.8; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+.sparkle {
+  animation: sparkle 2s infinite ease-in-out;
+}
