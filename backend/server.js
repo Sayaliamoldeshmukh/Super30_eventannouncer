@@ -1,61 +1,35 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-const authRoutes = require('./routes/auth');
-const clubAdminRoutes = require('./routes/clubAdmin');
-const eventRoutes = require('./routes/events'); // ✅ Added
-const studentRoutes = require('./routes/student');
-const path = require('path');
-
-require('dotenv').config();
-const db = require('./db');
-
 const app = express();
-const PORT = 5000;
 
-// Middleware
 app.use(express.json());
+
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
-// Session
 app.use(session({
-  secret: "yourSecret",
+  secret: process.env.SESSION_SECRET || 'secret',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: false, // true if using HTTPS
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 // 1 hour
-  }
+  cookie: { secure: false }
 }));
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/clubAdmin', clubAdminRoutes);
-app.use('/api/events', eventRoutes); // ✅ Added
-app.use('/api/student', studentRoutes);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// Root route
+// Your routes
 app.get('/', (req, res) => {
-  res.send('✅ Backend is running on render!');
-});
-// Protected Route Example
-app.get('/api/dashboard', (req, res) => {
-  if (req.session.user) {
-    res.json({ message: `Welcome ${req.session.user.name}`, role: req.session.user.role });
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
+  res.send('✅ Backend is live on Render!');
 });
 
-// Start Server
+// This is needed for local dev
+const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Local server running on http://localhost:${PORT}`);
   });
 }
 
-module.exports = app; // ⬅️ Required by Vercel
+// Required for Render
+module.exports = app;
