@@ -16,7 +16,7 @@ const PORT = 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://super30-eventannouncer.vercel.app',
   credentials: true
 }));
 
@@ -38,7 +38,10 @@ app.use('/api/clubAdmin', clubAdminRoutes);
 app.use('/api/events', eventRoutes); // ✅ Added
 app.use('/api/student', studentRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+// Root route
+app.get('/', (req, res) => {
+  res.send('✅ Backend is running on Vercel!');
+});
 // Protected Route Example
 app.get('/api/dashboard', (req, res) => {
   if (req.session.user) {
@@ -49,6 +52,10 @@ app.get('/api/dashboard', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app; // ⬅️ Required by Vercel
