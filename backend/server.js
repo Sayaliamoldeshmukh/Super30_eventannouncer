@@ -7,7 +7,7 @@ const eventRoutes = require('./routes/events'); // ✅ Added
 const studentRoutes = require('./routes/student');
 const path = require('path');
 
-
+require('dotenv').config();
 const db = require('./db');
 
 const app = express();
@@ -16,7 +16,7 @@ const PORT = 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'https://super30-eventannouncer.vercel.app',
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
@@ -40,7 +40,7 @@ app.use('/api/student', studentRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Root route
 app.get('/', (req, res) => {
-  res.send('✅ Backend is running on Vercel!');
+  res.send('✅ Backend is running on render!');
 });
 // Protected Route Example
 app.get('/api/dashboard', (req, res) => {
