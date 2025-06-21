@@ -25,9 +25,10 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
   try {
-    const res = await axios.post("http://localhost:5000/api/auth/signup", form, {
-      withCredentials: true
-    });
+    const res = await axios.post("/api/auth/signup", form, {
+  withCredentials: true
+});
+
     alert(res.data.message);
     // Redirect to login page after successful signup
     navigate('/login');
