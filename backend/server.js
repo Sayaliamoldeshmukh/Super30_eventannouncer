@@ -36,8 +36,8 @@ app.use(session({
 }));
 
 // Routes
-const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', auth);
 
 app.get('/test-env', (req, res) => {
   res.json({
