@@ -39,9 +39,13 @@ app.use(session({
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
-app.get('/', (req, res) => {
-  res.send('✅ Backend is live on Render with MySQL session!');
+app.get('/test-env', (req, res) => {
+  res.json({
+    frontend_url: process.env.FRONTEND_URL,
+    db_host: process.env.DB_HOST
+  });
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
