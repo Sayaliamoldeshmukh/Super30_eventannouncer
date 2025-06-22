@@ -1,7 +1,9 @@
-// src/components/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.withCredentials = true;
 
 export default function Login({ setUser }) {
   const navigate = useNavigate();
@@ -14,18 +16,11 @@ export default function Login({ setUser }) {
     e.preventDefault();
     setError('');
 
-   try {
-  const res = await axios.post(
-    '/api/auth/login',
-    { email, password },
-    { withCredentials: true }
-  );
-
-
-      console.log('✅ Login response:', res.data);
-      setUser(res.data.user);            // ← lift user into App state
+    try {
+      const res = await axios.post('/api/auth/login', { email, password });
+      setUser(res.data.user);
       alert(res.data.message);
-      navigate('/');            // ← go to dashboard
+      navigate('/');
     } catch (err) {
       console.error('❌ Login error:', err);
       setError(err.response?.data?.message || 'Login failed. Server error.');
@@ -35,71 +30,16 @@ export default function Login({ setUser }) {
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-r from-indigo-600 to-purple-600">
       <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-md">
-        <h2 className="text-3xl font-bold text-center text-purple-700 mb-1">
-          Welcome to Campus Events
-        </h2>
-        <p className="text-center text-gray-600 mb-6">
-          Join your campus community and discover amazing events
-        </p>
-
-        <div className="flex justify-center mb-6">
-          <button className="px-6 py-2 bg-white border border-gray-300 rounded-l-lg font-semibold text-black">
-            Login
-          </button>
-          <button
-            onClick={() => navigate('/signup')}
-            className="px-6 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-gray-500 hover:text-purple-600"
-          >
-            Sign Up
-          </button>
-        </div>
+        <h2 className="text-3xl font-bold text-center text-purple-700 mb-1">Welcome to Campus Events</h2>
+        <p className="text-center text-gray-600 mb-6">Join your campus community and discover amazing events</p>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              className="mt-1 w-full border px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="your email ID"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                className="mt-1 w-full border px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-              >
-                👁️
-              </span>
-            </div>
-          </div>
-
-          {/* <div className="text-sm text-purple-600 text-right cursor-pointer hover:underline">
-            Forgot password?
-          </div> */}
-
-          {error && <p className="text-sm text-red-600">{error}</p>}
-
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-purple-700 text-white font-semibold rounded-md hover:bg-purple-800 transition"
-          >
-            Sign In
-          </button>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
+          <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required />
+          <button type="submit" className="w-full bg-purple-700 text-white p-2 rounded">Sign In</button>
         </form>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </div>
     </div>
   );
