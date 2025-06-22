@@ -1,33 +1,29 @@
 const express = require('express');
 const router = express.Router();
-// const bcrypt = require('bcrypt');
-const bcrypt = require('bcryptjs'); // ✅ This works with your installed package
-
-const db = require('../db'); // your mysql2/promise db
+const bcrypt = require('bcryptjs');
+const db = require('../db'); // mysql2/promise connection
 
 // POST /api/auth/signup
 router.post('/signup', async (req, res) => {
   const { name, email, password, phone, department, role, club_name } = req.body;
-  console.log("📥 Signup endpoint hit");
-  console.log("Request body:", req.body);
+  console.log("📥 Signup endpoint hit:", req.body);
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-     const result = await db.query(
+    await db.query(
       'INSERT INTO users (name, email, password, phone, department, role, club_name) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [name, email, hashedPassword, phone, department, role, club_name || null]
     );
 
-
     res.status(201).json({ message: 'User registered successfully' });
-  }catch (error) {
-  console.error('❌ Signup failed error:', error.message);
-  res.status(500).json({ message: error.message || 'Server error during signup' });
-}
-
+  } catch (error) {
+    console.error('❌ Signup failed:', error.message);
+    res.status(500).json({ message: error.message || 'Server error during signup' });
+  }
 });
-console.log("Signup request received:", req.body);
 
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -39,13 +35,12 @@ router.post('/login', async (req, res) => {
     }
 
     const user = rows[0];
-
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // ✅ This sets the session
     req.session.user = {
       id: user.id,
       name: user.name,
@@ -71,7 +66,5 @@ router.post('/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
   });
 });
-
-
 
 module.exports = router;
