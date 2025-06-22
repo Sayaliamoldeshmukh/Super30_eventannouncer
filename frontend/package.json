@@ -2,7 +2,7 @@
   "name": "campus-events-fresh",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://super30-eventannouncer-u1ag.vercel.app",
+  "proxy": "https://campus-events-backend.onrender.com",
 
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
