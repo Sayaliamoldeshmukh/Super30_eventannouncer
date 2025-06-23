@@ -3,6 +3,8 @@ import axios from 'axios';
 import Navbar from '../components/navbar';
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 
 const StudentEvents = () => {
   const [events, setEvents] = useState([]);
@@ -16,7 +18,7 @@ const StudentEvents = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/events/all');
+      const res = await axios.get('/api/events/all');
       setEvents(res.data);
     } catch (error) {
       console.error('Failed to fetch events:', error);
@@ -25,7 +27,7 @@ const StudentEvents = () => {
 
   const fetchRegisteredEvents = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/student/registered');
+      const res = await axios.get('/api/student/registered');
       setRegisteredEvents(res.data);
     } catch (error) {
       console.error('Failed to fetch registrations:', error);
@@ -34,7 +36,7 @@ const StudentEvents = () => {
 
   const handleRegister = async (eventId) => {
     try {
-      await axios.post(`http://localhost:5000/api/student/register/${eventId}`);
+      await axios.post(`/api/student/register/${eventId}`);
       fetchRegisteredEvents();
     } catch (error) {
       if (error.response) {
@@ -65,7 +67,7 @@ const StudentEvents = () => {
       <div>
         {event.poster && (
           <img
-            src={`http://localhost:5000${event.poster}`}
+            src={`${process.env.REACT_APP_API_URL}${event.poster}`}
             alt="Poster"
             className="rounded mt-2 max-h-60 w-50 object-cover mx-auto"
           />
@@ -169,7 +171,7 @@ const StudentEvents = () => {
             </button>
             {selectedEvent.poster && (
               <img
-                src={`http://localhost:5000${selectedEvent.poster}`}
+                 src={`${process.env.REACT_APP_API_URL}${selectedEvent.poster}`}
                 alt="Poster"
                 className="rounded mb-4 max-h-60 object-cover mx-auto"
               />

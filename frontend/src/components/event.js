@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/navbar';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const EventDashboard = () => {
   const [events, setEvents] = useState([]);
@@ -22,7 +23,7 @@ const EventDashboard = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/clubAdmin/my-events');
+      const res = await axios.get('/api/clubAdmin/my-events');
       setEvents(res.data);
     } catch (error) {
       console.error('Failed to fetch events:', error);
@@ -54,7 +55,7 @@ const EventDashboard = () => {
         formData.append(key, value);
       });
 
-      await axios.post('http://localhost:5000/api/clubAdmin/events', formData, {
+      await axios.post('/api/clubAdmin/events', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -74,7 +75,7 @@ const EventDashboard = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/clubAdmin/event/${eventToEdit.id}`, newEvent);
+      await axios.put(`/api/clubAdmin/event/${eventToEdit.id}`, newEvent);
       fetchEvents();
       resetForm();
     } catch (error) {
@@ -84,7 +85,7 @@ const EventDashboard = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/clubAdmin/event/${id}`);
+      await axios.delete(`/api/clubAdmin/event/${id}`);
       fetchEvents();
     } catch (error) {
       console.error('Failed to delete event:', error);
@@ -107,7 +108,7 @@ const EventDashboard = () => {
     }
 
     try {
-      const res = await axios.get(`http://localhost:5000/api/clubAdmin/event/${eventId}/registrations`);
+      const res = await axios.get(`/api/clubAdmin/event/${eventId}/registrations`);
       setRegistrations((prev) => ({ ...prev, [eventId]: res.data }));
       setExpandedEventId(eventId);
     } catch (error) {
@@ -205,7 +206,7 @@ const EventDashboard = () => {
 
               {event.poster && (
                 <img
-                  src={`http://localhost:5000${event.poster}`}
+                   src={`${process.env.REACT_APP_API_URL}${event.poster}`}
                   alt="Poster"
                   className="rounded mt-2 max-h-40 w-full object-cover"
                 />
