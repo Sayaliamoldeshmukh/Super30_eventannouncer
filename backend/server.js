@@ -11,8 +11,8 @@ app.use(express.json());
 
 // ✅ CORS Setup for both local + deployed frontend
 app.use(cors({
-  origin: [ 'https://super30-eventannouncer.vercel.app'],
-   //origin: ['http://localhost:3000', 'https://super30-eventannouncer.vercel.app'],
+  origin: ['http://localhost:3000', 'https://super30-eventannouncer.vercel.app'],
+  
   credentials: true
 }));
 
