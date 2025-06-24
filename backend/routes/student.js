@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); // Or wherever your MySQL pool/connection is
+const db = require('../db'); // Or wherever your MySQL pool/connection is
 
 // Middleware to check if student is logged in
 const isStudent = (req, res, next) => {
