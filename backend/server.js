@@ -12,7 +12,6 @@ app.use(express.json());
 // ✅ CORS Setup for both local + deployed frontend
 app.use(cors({
   origin: ['http://localhost:3000', 'https://super30-eventannouncer.vercel.app'],
-  
   credentials: true
 }));
 
@@ -28,6 +27,11 @@ const sessionStore = new MySQLStore({
   database: process.env.DB_NAME
 });
 
+// ✅ Trust proxy for secure cookies in production (REQUIRED for Render)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // ✅ Session Middleware
 app.use(session({
   key: 'session_cookie_name',
@@ -37,10 +41,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure:true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 1000 * 60 * 60 * 24,
+    secure: process.env.NODE_ENV === 'production', // Use HTTPS cookies only in prod
+    sameSite: 'none', // Required for cross-site cookies (Vercel <-> Render)
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
 
