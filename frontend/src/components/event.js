@@ -74,14 +74,23 @@ const EventDashboard = () => {
   };
 
   const handleUpdate = async () => {
-    try {
-      await axios.put(`/api/clubAdmin/event/${eventToEdit.id}`, newEvent);
-      fetchEvents();
-      resetForm();
-    } catch (error) {
-      console.error('Failed to update event:', error);
-    }
-  };
+  try {
+    const formData = new FormData();
+    Object.entries(newEvent).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    await axios.put(`/api/clubAdmin/event/${eventToEdit.id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    fetchEvents();
+    resetForm();
+  } catch (error) {
+    console.error('Failed to update event:', error);
+  }
+};
+
 
   const handleDelete = async (id) => {
     try {
